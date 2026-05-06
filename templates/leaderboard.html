@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MathQuest — Leaderboard 🏆</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body class="leaderboard-page">
+
+  <div class="bg-shapes">
+    <div class="shape shape-1">🏆</div>
+    <div class="shape shape-3">⭐</div>
+    <div class="shape shape-5">🌟</div>
+  </div>
+
+  <div class="leaderboard-container">
+    <a href="/" class="back-btn">← Back</a>
+    <h1 class="page-title">🏆 Hall of Fame</h1>
+    <p class="page-subtitle">Top Math Champions!</p>
+
+    <div class="lb-tabs">
+      <button class="lb-tab active" onclick="switchTab('alltime', this)">All Time</button>
+      <button class="lb-tab" onclick="switchTab('today', this)">Today</button>
+    </div>
+
+    <div id="leaderboardList" class="leaderboard-list">
+      <div class="loading-spinner">⏳ Loading champions...</div>
+    </div>
+
+    <div class="lb-actions">
+      <a href="/play" class="btn btn-primary">🚀 Play Now!</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/firebase-init.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
+</body>
+</html>

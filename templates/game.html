@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MathQuest — Play!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body class="game-page">
+
+  <!-- Confetti container -->
+  <div id="confettiContainer"></div>
+
+  <!-- Top HUD -->
+  <header class="game-hud">
+    <div class="hud-left">
+      <span id="playerAvatar" class="hud-avatar">🦁</span>
+      <span id="playerNameDisplay" class="hud-name">Player</span>
+    </div>
+    <div class="hud-center">
+      <div class="score-display">
+        ⭐ <span id="scoreDisplay">0</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="lives-display" id="livesDisplay">❤️❤️❤️</div>
+      <button class="btn-icon" onclick="goHome()" title="Home">🏠</button>
+    </div>
+  </header>
+
+  <!-- Mode selection screen -->
+  <div id="modeScreen" class="screen active">
+    <div class="mode-container">
+      <h2 class="section-title">⚡ Choose Your Battle!</h2>
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="addition" onclick="selectMode('addition')">
+          <span class="mode-icon">➕</span>
+          <span class="mode-name">Addition</span>
+          <span class="mode-desc">Add numbers up!</span>
+        </button>
+        <button class="mode-card" data-mode="subtraction" onclick="selectMode('subtraction')">
+          <span class="mode-icon">➖</span>
+          <span class="mode-name">Subtraction</span>
+          <span class="mode-desc">Take numbers away!</span>
+        </button>
+        <button class="mode-card" data-mode="multiplication" onclick="selectMode('multiplication')">
+          <span class="mode-icon">✖️</span>
+          <span class="mode-name">Multiply</span>
+          <span class="mode-desc">Times tables power!</span>
+        </button>
+        <button class="mode-card" data-mode="division" onclick="selectMode('division')">
+          <span class="mode-icon">➗</span>
+          <span class="mode-name">Division</span>
+          <span class="mode-desc">Split things up!</span>
+        </button>
+        <button class="mode-card mode-card-special" data-mode="mixed" onclick="selectMode('mixed')">
+          <span class="mode-icon">🌪️</span>
+          <span class="mode-name">Mixed Madness</span>
+          <span class="mode-desc">All types! Dare you?</span>
+        </button>
+        <button class="mode-card mode-card-daily" data-mode="daily" onclick="selectMode('daily')">
+          <span class="mode-icon">📅</span>
+          <span class="mode-name">Daily Challenge</span>
+          <span class="mode-desc">Today's special!</span>
+        </button>
+      </div>
+
+      <!-- Difficulty -->
+      <div class="difficulty-selector">
+        <p class="label">🎚️ Choose Difficulty:</p>
+        <div class="diff-buttons">
+          <button class="diff-btn active" data-diff="easy" onclick="selectDifficulty('easy')">🟢 Easy</button>
+          <button class="diff-btn" data-diff="medium" onclick="selectDifficulty('medium')">🟡 Medium</button>
+          <button class="diff-btn" data-diff="hard" onclick="selectDifficulty('hard')">🔴 Hard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Countdown screen -->
+  <div id="countdownScreen" class="screen">
+    <div class="countdown-container">
+      <div id="countdownNumber" class="countdown-number">3</div>
+      <p class="countdown-text">Get Ready!</p>
+    </div>
+  </div>
+
+  <!-- Question screen -->
+  <div id="questionScreen" class="screen">
+    <div class="question-container">
+
+      <!-- Progress bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar"></div>
+        <span class="progress-text" id="progressText">1 / 10</span>
+      </div>
+
+      <!-- Level badge -->
+      <div class="level-badge" id="levelBadge">Level 1 — Easy</div>
+
+      <!-- Timer ring -->
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" viewBox="0 0 80 80">
+          <circle class="timer-bg" cx="40" cy="40" r="34"/>
+          <circle class="timer-fg" id="timerCircle" cx="40" cy="40" r="34"/>
+        </svg>
+        <span class="timer-number" id="timerNumber">10</span>
+      </div>
+
+      <!-- Question -->
+      <div class="question-card" id="questionCard">
+        <div class="question-text" id="questionText">5 + 3 = ?</div>
+      </div>
+
+      <!-- Answer choices -->
+      <div class="choices-grid" id="choicesGrid">
+        <!-- Filled by JS -->
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" id="feedback"></div>
+
+    </div>
+  </div>
+
+  <!-- Results screen -->
+  <div id="resultsScreen" class="screen">
+    <div class="results-container">
+      <div class="results-trophy" id="resultsTrophy">🏆</div>
+      <h2 class="results-title" id="resultsTitle">Amazing!</h2>
+      <div class="results-stats">
+        <div class="stat-box">
+          <span class="stat-num" id="finalScore">0</span>
+          <span class="stat-label">Score</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="finalAccuracy">0%</span>
+          <span class="stat-label">Accuracy</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="finalLevel">1</span>
+          <span class="stat-label">Level</span>
+        </div>
+      </div>
+
+      <!-- Badges earned -->
+      <div class="badges-earned" id="badgesEarned"></div>
+
+      <div class="results-buttons">
+        <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again</button>
+        <button class="btn btn-secondary" onclick="goHome()">🏠 Home</button>
+        <a href="/leaderboard" class="btn btn-accent">🏆 Leaderboard</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/firebase-init.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/audio.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
