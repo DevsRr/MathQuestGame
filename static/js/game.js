@@ -421,7 +421,7 @@ function updateHUD() {
 }
 
 // ── End game ───────────────────────────────
-function endGame() {
+async function endGame() {
   clearInterval(G.timerInterval);
   AudioManager.stopBgMusic();
 
@@ -474,7 +474,10 @@ function endGame() {
   };
 
   // Firebase
-  if (typeof saveScore !== 'undefined') saveScore(data);
+  if (typeof saveScore !== 'undefined') {
+  const ok = await saveScore(data);
+  console.log("Saved?", ok);
+}
   if (typeof savePlayerProgress !== 'undefined') {
     savePlayerProgress(G.player.name, G.player.avatar, {
       highScore: G.score, lastAccuracy: accuracy
