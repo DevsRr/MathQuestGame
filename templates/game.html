@@ -7,6 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+
+  <!-- Firebase SDK (compat) — must be in <head> before firebase-init.js -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 </head>
 <body class="game-page">
 
@@ -90,17 +95,11 @@
   <!-- Question screen -->
   <div id="questionScreen" class="screen">
     <div class="question-container">
-
-      <!-- Progress bar -->
       <div class="progress-bar-wrap">
         <div class="progress-bar" id="progressBar"></div>
         <span class="progress-text" id="progressText">1 / 10</span>
       </div>
-
-      <!-- Level badge -->
       <div class="level-badge" id="levelBadge">Level 1 — Easy</div>
-
-      <!-- Timer ring -->
       <div class="timer-ring-wrap">
         <svg class="timer-ring" viewBox="0 0 80 80">
           <circle class="timer-bg" cx="40" cy="40" r="34"/>
@@ -108,20 +107,11 @@
         </svg>
         <span class="timer-number" id="timerNumber">10</span>
       </div>
-
-      <!-- Question -->
       <div class="question-card" id="questionCard">
         <div class="question-text" id="questionText">5 + 3 = ?</div>
       </div>
-
-      <!-- Answer choices -->
-      <div class="choices-grid" id="choicesGrid">
-        <!-- Filled by JS -->
-      </div>
-
-      <!-- Feedback -->
+      <div class="choices-grid" id="choicesGrid"></div>
       <div class="feedback" id="feedback"></div>
-
     </div>
   </div>
 
@@ -144,10 +134,7 @@
           <span class="stat-label">Level</span>
         </div>
       </div>
-
-      <!-- Badges earned -->
       <div class="badges-earned" id="badgesEarned"></div>
-
       <div class="results-buttons">
         <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again</button>
         <button class="btn btn-secondary" onclick="goHome()">🏠 Home</button>

@@ -1,42 +1,4 @@
-// ═══════════════════════════════════════════════════════════
-//  firebase-init.js
-//  Replace the firebaseConfig object below with YOUR project config
-//  from Firebase Console → Project Settings → Your Apps → Web App
-// ═══════════════════════════════════════════════════════════
 
-// Firebase v9 CDN (compat mode for simplicity)
-// Loaded from index.html / game.html via <script> tag — we import
-// the SDK via CDN in the HTML (added dynamically here)
-
-(function loadFirebaseSDK() {
-  const scripts = [
-    'https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js',
-    'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js',
-    'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js'
-  ];
-
-  let loaded = 0;
-
-  scripts.forEach(src => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = () => {
-      loaded++;
-      if (loaded === scripts.length) initFirebase();
-    };
-    document.head.appendChild(s);
-  });
-})();
-
-// ── PASTE YOUR FIREBASE CONFIG HERE ──────────────────────
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDbTaI2f4rQ1iGAFq_9G8t4w02kASYYRyo",
   authDomain: "mathquestgame.firebaseapp.com",
@@ -46,10 +8,6 @@ const firebaseConfig = {
   appId: "1:186591335714:web:c8398064b4eafa4492017b",
   measurementId: "G-362RFCPT77"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 // ─────────────────────────────────────────────────────────
 
 window.db = null;
@@ -65,20 +23,24 @@ function initFirebase() {
     window.db = firebase.firestore();
     window.firebaseAuth = firebase.auth();
 
-    // Anonymous sign-in for easy player tracking
-    window.firebaseAuth.signInAnonymously().then(result => {
-      window.currentUser = result.user;
-      window.firebaseReady = true;
-      console.log('[Firebase] Ready. UID:', result.user.uid);
-    }).catch(err => {
-      console.warn('[Firebase] Auth skipped (demo mode):', err.message);
-      window.firebaseReady = false;
-    });
+    window.firebaseAuth.signInAnonymously()
+      .then(result => {
+        window.currentUser = result.user;
+        window.firebaseReady = true;
+        console.log('[Firebase] Ready. UID:', result.user.uid);
+      })
+      .catch(err => {
+        console.warn('[Firebase] Auth skipped (demo mode):', err.message);
+        window.firebaseReady = false;
+      });
   } catch (e) {
     console.warn('[Firebase] Init failed — running in offline demo mode:', e.message);
     window.firebaseReady = false;
   }
 }
+
+// Called by the last Firebase <script> tag's onload (see HTML)
+window._firebaseReady = initFirebase;
 
 // ── Firestore helpers ──────────────────────────────────────
 
@@ -115,14 +77,14 @@ async function getTodayScores(limitCount = 10) {
   if (!window.firebaseReady || !window.db) return [];
   try {
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     const snap = await window.db.collection('scores')
       .where('timestamp', '>=', today)
       .orderBy('timestamp', 'desc')
       .limit(50)
       .get();
     const scores = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    return scores.sort((a,b) => b.score - a.score).slice(0, limitCount);
+    return scores.sort((a, b) => b.score - a.score).slice(0, limitCount);
   } catch (e) {
     console.warn('[Firebase] Get today scores failed:', e.message);
     return [];
