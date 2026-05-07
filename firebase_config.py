@@ -15,12 +15,13 @@
 # ─────────────────────────────────────────────
 
 FIREBASE_CONFIG_TEMPLATE = {
-    "apiKey": "YOUR_API_KEY",
-    "authDomain": "YOUR_PROJECT.firebaseapp.com",
-    "projectId": "YOUR_PROJECT_ID",
-    "storageBucket": "YOUR_PROJECT.appspot.com",
-    "messagingSenderId": "YOUR_SENDER_ID",
-    "appId": "YOUR_APP_ID"
+    "apiKey": "AIzaSyDbTaI2f4rQ1iGAFq_9G8t4w02kASYYRyo",
+    "authDomain": "mathquestgame.firebaseapp.com",
+    "projectId": "mathquestgame",
+    "storageBucket": "mathquestgame.firebasestorage.app",
+    "messagingSenderId": "186591335714",
+    "appId": "1:186591335714:web:c8398064b4eafa4492017b",
+    "measurementId": "G-362RFCPT77"
 }
 
 # Optional: If you want server-side Firebase Admin SDK access
